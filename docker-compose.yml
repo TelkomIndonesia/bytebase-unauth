@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:14
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bytebase
+      POSTGRES_USER: bytebase
+      POSTGRES_PASSWORD: bytebase
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  bytebase:
+    image: bytebase/bytebase:2.0.0
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      PG_URL: postgresql://bytebase:bytebase@postgres:5432/bytebase
+    command: --external-url https://bytebase.test.localhost:8443 --port 8080
+
+  bytebase-forwardauth:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - bytebase
+    environment:
+      BYTEBASE_FORWARDAUTH_PG_URL: postgresql://bytebase:bytebase@postgres:5432/bytebase
+      BYTEBASE_FORWARDAUTH_LISTEN_ADDRESS: :8080
+      BYTEBASE_FORWARDAUTH_CREATOR_ID: "101"
+      BYTEBASE_FORWARDAUTH_GROUP_PREFIX: "bytebase/"
+    working_dir: $PWD
+    volumes:
+      - $PWD:$PWD
+      - golang:/opt/go
+
+  gateway:
+    image: ghcr.io/telkomindonesia/caddy:2.6.4-1
+    restart: unless-stopped
+    environment:
+      CADDY_SECURITY_CLIENT_ID:
+      CADDY_SECURITY_CLIENT_SECRET:
+      CADDY_SECURITY_BASE_AUTH_URL:
+      CADDY_SECURITY_METADATA:
+    ports:
+      - 8443:8443
+      - 8444:8444
+    volumes:
+      - ./Caddyfile:/etc/Caddyfile
+    entrypoint: caddy
+    command: run --watch --config /etc/Caddyfile
+
+volumes:
+  postgres:
+  golang:
