@@ -34,7 +34,6 @@ services:
     working_dir: $PWD
     volumes:
       - $PWD:$PWD
-      - golang:/opt/go
 
   gateway:
     image: ghcr.io/telkomindonesia/caddy:2.6.4-1
@@ -54,4 +53,3 @@ services:
 
 volumes:
   postgres:
-  golang:

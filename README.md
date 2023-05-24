@@ -17,4 +17,4 @@ A simple service that create [bytebase](https://www.bytebase.com/) login session
 
 ## Example
 
-See [docker-compose.yml](./docker-compose.yml) to integrate with [caddy security plugin](https://authp.github.io/) for enabling OAuth2 based SSO.
+See [docker-compose.yml](./docker-compose.yml) for reference on integrating with [caddy security plugin](https://authp.github.io/) for enabling OAuth2 based SSO.
