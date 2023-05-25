@@ -1,4 +1,4 @@
-module github.com/telkomindonesia/bytebase-forwardauth
+module github.com/telkomindonesia/bytebase-unauth
 
 go 1.20
 

@@ -50,7 +50,7 @@ bytebase.test.localhost:8443 {
 
 	handle {
 		authorize with oidc-provider
-		reverse_proxy /auth bytebase-forwardauth:8080
+		reverse_proxy /auth bytebase-unauth:8080
 		reverse_proxy bytebase:8080
 	}
 }

@@ -20,17 +20,17 @@ services:
       PG_URL: postgresql://bytebase:bytebase@postgres:5432/bytebase
     command: --external-url https://bytebase.test.localhost:8443 --port 8080
 
-  bytebase-forwardauth:
+  bytebase-unauth:
     build: .
     restart: unless-stopped
     depends_on:
       - postgres
       - bytebase
     environment:
-      BYTEBASE_FORWARDAUTH_PG_URL: postgresql://bytebase:bytebase@postgres:5432/bytebase
-      BYTEBASE_FORWARDAUTH_LISTEN_ADDRESS: :8080
-      BYTEBASE_FORWARDAUTH_CREATOR_ID: "101"
-      BYTEBASE_FORWARDAUTH_GROUP_PREFIX: "bytebase/"
+      BYTEBASE_UNAUTH_PG_URL: postgresql://bytebase:bytebase@postgres:5432/bytebase
+      BYTEBASE_UNAUTH_LISTEN_ADDRESS: :8080
+      BYTEBASE_UNAUTH_CREATOR_ID: "101"
+      BYTEBASE_UNAUTH_GROUP_PREFIX: "bytebase/"
     working_dir: $PWD
     volumes:
       - $PWD:$PWD

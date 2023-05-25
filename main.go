@@ -17,7 +17,7 @@ import (
 )
 
 func createHandler() func(w http.ResponseWriter, r *http.Request) {
-	mdDB := store.NewMetadataDBWithExternalPg(os.Getenv("BYTEBASE_FORWARDAUTH_PG_URL"), "", "", common.ReleaseModeProd)
+	mdDB := store.NewMetadataDBWithExternalPg(os.Getenv("BYTEBASE_UNAUTH_PG_URL"), "", "", common.ReleaseModeProd)
 	db, err := mdDB.Connect(0, false, "")
 	if err != nil {
 		log.Fatalln("cannot connect to database", err)
@@ -34,7 +34,7 @@ func createHandler() func(w http.ResponseWriter, r *http.Request) {
 	}
 	authSecret := as.Value
 
-	cID := os.Getenv("BYTEBASE_FORWARDAUTH_CREATOR_ID")
+	cID := os.Getenv("BYTEBASE_UNAUTH_CREATOR_ID")
 	if cID == "" {
 		cID = "101"
 	}
@@ -43,7 +43,7 @@ func createHandler() func(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln("invalid creator id: " + strconv.Itoa(creatorID))
 	}
 
-	groupPrefix := os.Getenv("BYTEBASE_FORWARDAUTH_GROUP_PREFIX")
+	groupPrefix := os.Getenv("BYTEBASE_UNAUTH_GROUP_PREFIX")
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		email := r.Header.Get("X-User-Email")
@@ -129,7 +129,7 @@ func sendError(w http.ResponseWriter, st int, err error) {
 func main() {
 	http.HandleFunc("/", createHandler())
 
-	addr := os.Getenv("BYTEBASE_FORWARDAUTH_LISTEN_ADDRESS")
+	addr := os.Getenv("BYTEBASE_UNAUTH_LISTEN_ADDRESS")
 	if addr == "" {
 		addr = ":8080"
 	}

@@ -12,14 +12,14 @@ RUN --mount=type=cache,target=/opt/go \
     go build \
     --tags "release" \
     -ldflags "-w -s" \
-    -o bytebase-forwardauth \
+    -o bytebase-unauth \
     main.go
 
 
 
 FROM debian:bullseye-slim as monolithic
 
-COPY --from=backend /backend-build/bytebase-forwardauth /usr/local/bin/
+COPY --from=backend /backend-build/bytebase-unauth /usr/local/bin/
 COPY --from=backend /etc/ssl/certs /etc/ssl/certs
 
-ENTRYPOINT [ "/usr/local/bin/bytebase-forwardauth" ]
+ENTRYPOINT [ "/usr/local/bin/bytebase-unauth" ]
