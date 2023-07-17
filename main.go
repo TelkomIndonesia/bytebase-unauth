@@ -28,9 +28,9 @@ func createHandler() func(w http.ResponseWriter, r *http.Request) {
 	storeInstance := store.New(db)
 
 	s := api.SettingAuthSecret
-	as, err := storeInstance.GetSetting(context.Background(), &api.SettingFind{Name: &s})
+	as, err := storeInstance.GetSettingV2(context.Background(), &store.FindSettingMessage{Name: &s})
 	if err != nil {
-		log.Fatalf("cannot get setting '%s': %v\n", s, err)
+		log.Fatalln("cannot get auth secret setting", err)
 	}
 	authSecret := as.Value
 
@@ -69,7 +69,7 @@ func createHandler() func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		user, err := storeInstance.GetUser(r.Context(), &store.FindUserMessage{Email: &email})
+		user, err := storeInstance.GetUser(r.Context(), &store.FindUserMessage{Email: &email, ShowDeleted: true})
 		if err != nil {
 			sendError(w, 500, fmt.Errorf("find user failed: %w", err))
 			return

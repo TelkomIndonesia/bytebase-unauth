@@ -12,7 +12,7 @@ services:
       - 5432:5432
 
   bytebase:
-    image: bytebase/bytebase:2.0.0
+    image: bytebase/bytebase:2.4.0
     restart: unless-stopped
     depends_on:
       - postgres
